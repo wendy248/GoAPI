@@ -5,6 +5,6 @@ type Mahasiswa struct {
 	Nama          string `json:"nama"`
 	Prodi         string `json:"prodi"`
 	Fakultas      string `json:"fakultas"`
-	NIM           int16  `json:"nim"`
+	NIM           int64  `json:"nim"`
 	TahunAngkatan int16  `json:"tahun"`
 }

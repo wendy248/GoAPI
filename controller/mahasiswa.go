@@ -11,11 +11,11 @@ import (
 )
 
 type MahasiswaInput struct {
-	Nama          string `json:"nama" binding:"required"`
+	Nama          string `json:"nama" binding:"required,min=6"`
 	Prodi         string `json:"prodi" binding:"required"`
 	Fakultas      string `json:"fakultas" binding:"required"`
-	NIM           int16  `json:"nim" binding:"required"`
-	TahunAngkatan int16  `json:"tahun" binding:"required"`
+	NIM           int64  `json:"nim" binding:"required,numeric,min=100000"`
+	TahunAngkatan int16  `json:"tahun" binding:"required,numeric"`
 }
 
 //Read Data
@@ -44,23 +44,24 @@ func CreateData(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error incompleted data": errorMessages,
+			"error": errorMessages,
 		})
-		return
-	}
 
-	//proses input data
-	mhs := models.Mahasiswa{
-		Nama:          dataInput.Nama,
-		Prodi:         dataInput.Prodi,
-		Fakultas:      dataInput.Fakultas,
-		NIM:           dataInput.NIM,
-		TahunAngkatan: dataInput.TahunAngkatan,
-	}
+	} else {
 
-	db.Create(&mhs) //Create DB MySQL
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Successfully insert data",
-		"Data":    mhs,
-	})
+		//proses input data
+		mhs := models.Mahasiswa{
+			Nama:          dataInput.Nama,
+			Prodi:         dataInput.Prodi,
+			Fakultas:      dataInput.Fakultas,
+			NIM:           dataInput.NIM,
+			TahunAngkatan: dataInput.TahunAngkatan,
+		}
+
+		db.Create(&mhs) //Create DB MySQL
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Successfully insert data",
+			"Data":    mhs,
+		})
+	}
 }
