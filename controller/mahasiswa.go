@@ -6,12 +6,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"github.com/jinzhu/gorm"
 )
 
 type MahasiswaInput struct {
-	ID            int16  `json:"id"`
 	Nama          string `json:"nama" binding:"required"`
 	Prodi         string `json:"prodi" binding:"required"`
 	Fakultas      string `json:"fakultas" binding:"required"`
@@ -37,7 +36,7 @@ func CreateData(c *gin.Context) {
 	//validasi inputan
 	var dataInput MahasiswaInput
 	err := c.ShouldBindJSON(&dataInput)
-	
+
 	if err != nil {
 		errorMessages := []string{}
 		for _, e := range err.(validator.ValidationErrors) {
@@ -45,14 +44,13 @@ func CreateData(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": errorMessages,
+			"error incompleted data": errorMessages,
 		})
 		return
 	}
 
 	//proses input data
 	mhs := models.Mahasiswa{
-		ID:            dataInput.ID,
 		Nama:          dataInput.Nama,
 		Prodi:         dataInput.Prodi,
 		Fakultas:      dataInput.Fakultas,
