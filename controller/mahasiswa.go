@@ -29,7 +29,7 @@ func ReadData(c *gin.Context) {
 	})
 }
 
-//POST data >> Create Data
+//Create Data
 func CreateData(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
@@ -64,4 +64,34 @@ func CreateData(c *gin.Context) {
 			"Data":    mhs,
 		})
 	}
+}
+
+//Update Data
+func UpdateData(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	//validasi data
+	var mhs models.Mahasiswa
+	if err := db.Where("nim = ?", c.Param("nim")).First(&mhs).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Data mahasiswa tidak di temukan",
+		})
+		return
+	}
+
+	//validasi inputan
+	var dataInput MahasiswaInput
+	if err := c.ShouldBindJSON(&dataInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	//	proses Ubah data
+	db.Model(&mhs).Update(&dataInput)
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "Successfull to Update Data",
+		"Data":    mhs,
+	})
 }

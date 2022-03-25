@@ -14,7 +14,18 @@ func main() {
 		c.Set("db", db)
 		c.Next()
 	})
-	r.GET("/mahasiswa", controller.ReadData)
-	r.POST("/insert", controller.CreateData)
+
+	v1 := r.Group("/api/v1")
+	//Read
+	v1.GET("/mahasiswa", controller.ReadData)
+
+	//Create
+	v1.POST("/mahasiswa", controller.CreateData)
+
+	//Update
+	v1.PUT("/test/:nim", controller.UpdateData)
+
+	//Delete
+	// v1.DELETE("/mahasiswa")
 	r.Run()
 }
