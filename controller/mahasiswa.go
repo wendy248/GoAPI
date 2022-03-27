@@ -18,9 +18,17 @@ type MahasiswaInput struct {
 	TahunAngkatan int16  `json:"tahun" binding:"required,numeric"`
 }
 
+type MahasiswaUpdate struct {
+	Nama          string
+	Prodi         string
+	Fakultas      string
+	NIM           int64
+	TahunAngkatan int64
+}
+
 //Read Data
 func ReadData(c *gin.Context) {
-	db := c.MustGet("test").(*gorm.DB)
+	db := c.MustGet("db").(*gorm.DB)
 	var mhs []models.Mahasiswa
 	db.Find(&mhs)
 
@@ -80,7 +88,7 @@ func UpdateData(c *gin.Context) {
 	}
 
 	//validasi inputan
-	var dataInput MahasiswaInput
+	var dataInput MahasiswaUpdate
 	if err := c.ShouldBindJSON(&dataInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -93,5 +101,23 @@ func UpdateData(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "Successfull to Update Data",
 		"Data":    mhs,
+	})
+}
+
+// Delete Data
+func DeleteData(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	var mhs models.Mahasiswa
+	if err := db.Where("nim = ?", c.Query("nim")).First(&mhs).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to delete data",
+		})
+		return
+	}
+
+	db.Delete(&mhs)
+	c.JSON(http.StatusOK, gin.H{
+		"Data": "Success to delete data",
 	})
 }

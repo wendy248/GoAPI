@@ -15,17 +15,17 @@ func main() {
 		c.Next()
 	})
 
-	v1 := r.Group("/api/v1")
+	// v1 := r.Group("/api/v1")
 	//Read
-	v1.GET("/mahasiswa", controller.ReadData)
+	r.GET("/mahasiswa", controller.ReadData)
 
 	//Create
-	v1.POST("/mahasiswa", controller.CreateData)
+	r.POST("/mahasiswa", controller.CreateData)
 
 	//Update
-	v1.PUT("/test/:nim", controller.UpdateData)
+	r.PUT("/test/:nim", controller.UpdateData)
 
 	//Delete
-	// v1.DELETE("/mahasiswa")
+	r.DELETE("/mahasiswa", controller.DeleteData)
 	r.Run()
 }
