@@ -23,7 +23,7 @@ func main() {
 	r.POST("/mahasiswa", controller.CreateData)
 
 	//Update
-	r.PUT("/test/:nim", controller.UpdateData)
+	r.PUT("/mahasiswa/:nim", controller.UpdateData)
 
 	//Delete
 	r.DELETE("/mahasiswa", controller.DeleteData)
