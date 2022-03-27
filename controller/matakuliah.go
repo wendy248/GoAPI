@@ -77,12 +77,15 @@ func UpdateMatkul(c *gin.Context) {
 
 	//validasi data
 	var matakuliah models.MataKuliah
-	if err := db.Where("kode_matkul = ?", c.Param("kode")).First(&matakuliah).Error; err != nil {
+	if err := db.Where("kode_matkul = ?", c.Param("kode")).First(&matakuliah).Error; 
+	err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Data Mata Kuliah tidak di temukan",
 		})
 		return
 	}
+
+	// if err2 := db.Where("kode_matku")
 
 	//validasi inputan
 	var dataInput MataKuliahUpdate
