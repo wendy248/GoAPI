@@ -30,5 +30,6 @@ func main() {
 
 	//Delete
 	r.DELETE("/mahasiswa", controller.DeleteData)
+	r.DELETE("/matakuliah", controller.DeleteMatkul)
 	r.Run()
 }

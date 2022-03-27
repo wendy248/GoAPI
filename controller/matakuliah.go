@@ -100,3 +100,21 @@ func UpdateMatkul(c *gin.Context) {
 		"Data":    matakuliah,
 	})
 }
+
+// Delete Data
+func DeleteMatkul(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	var matakuliah models.MataKuliah
+	if err := db.Where("kode_matkul = ?", c.Query("kode")).First(&matakuliah).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Data not found in database",
+		})
+		return
+	}
+
+	db.Delete(&matakuliah)
+	c.JSON(http.StatusOK, gin.H{
+		"Data": "Success to delete data",
+	})
+}
