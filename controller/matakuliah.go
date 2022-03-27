@@ -11,10 +11,17 @@ import (
 )
 
 type MataKuliahInput struct {
-	KodeMatkul    string `json:"kode" binding:"required"`
-	NamaMatkul    string `json:"nama" binding:"required"`
-	JumlahSKS     int16  `json:"jumlah" binding:"required"`
-	DosenPengampu string `json:"dosen" binding:"required"`
+	KodeMatkul    string `json:"kode matkul" binding:"required"`
+	NamaMatkul    string `json:"nama matkul" binding:"required,min=4"`
+	JumlahSKS     int16  `json:"jumlah sks" binding:"required"`
+	DosenPengampu string `json:"dosen pengampu" binding:"required"`
+}
+
+type MataKuliahUpdate struct {
+	KodeMatkul    string `json:"kode matkul"`
+	NamaMatkul    string `json:"nama matkul" binding:"min=4"`
+	JumlahSKS     int16  `json:"jumlah sks"`
+	DosenPengampu string `json:"dosen pengampu"`
 }
 
 //ReadData
@@ -31,7 +38,7 @@ func ReadMatkul(c *gin.Context) {
 //Create Data
 func CreateMatkul(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	fmt.Println("masuk setelah db")
+
 	//validasi inputan
 	var dataInputMatkul MataKuliahInput
 	err := c.ShouldBindJSON(&dataInputMatkul)
@@ -43,7 +50,7 @@ func CreateMatkul(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": errorMessages,
+			"error": err.Error(),
 		})
 
 	} else {
@@ -62,4 +69,34 @@ func CreateMatkul(c *gin.Context) {
 			"Data":    matkul,
 		})
 	}
+}
+
+//Update Data
+func UpdateMatkul(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	//validasi data
+	var matakuliah models.MataKuliah
+	if err := db.Where("kode_matkul = ?", c.Param("kode")).First(&matakuliah).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Data Mata Kuliah tidak di temukan",
+		})
+		return
+	}
+
+	//validasi inputan
+	var dataInput MataKuliahUpdate
+	if err := c.ShouldBindJSON(&dataInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	//	proses Ubah data
+	db.Model(&matakuliah).Update(&dataInput)
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "Successfull to Update Data",
+		"Data":    matakuliah,
+	})
 }

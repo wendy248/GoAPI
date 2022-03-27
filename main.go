@@ -26,6 +26,7 @@ func main() {
 
 	//Update
 	r.PUT("/mahasiswa/:nim", controller.UpdateData)
+	r.PUT("/matakuliah/:kode", controller.UpdateMatkul)
 
 	//Delete
 	r.DELETE("/mahasiswa", controller.DeleteData)

@@ -11,6 +11,6 @@ func SetupModels() *gorm.DB {
 		panic("connection to database error")
 	}
 
-	db.AutoMigrate(&Mahasiswa{}, &MataKuliah{})
+	db.AutoMigrate(&Mahasiswa{}, &MataKuliah{})	//untuk menambah tabel
 	return db
 }
