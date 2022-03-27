@@ -30,18 +30,18 @@ type MahasiswaUpdate struct {
 func ReadData(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var mhs []models.Mahasiswa
-	db.Find(&mhs)
 
+	db.Find(&mhs)
 	c.JSON(http.StatusOK, gin.H{
 		"data": mhs,
 	})
 }
 
-//Create Data
+//Create Data / Upload Data
 func CreateData(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	//validasi inputan
+	//Validate Input
 	var dataInput MahasiswaInput
 	err := c.ShouldBindJSON(&dataInput)
 
@@ -57,7 +57,7 @@ func CreateData(c *gin.Context) {
 
 	} else {
 
-		//proses input data
+		//Process Input
 		mhs := models.Mahasiswa{
 			Nama:          dataInput.Nama,
 			Prodi:         dataInput.Prodi,
@@ -74,12 +74,13 @@ func CreateData(c *gin.Context) {
 	}
 }
 
-//Update Data
+// Update Data
 func UpdateData(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	//validasi data
+	//Valitdate Data
 	var mhs models.Mahasiswa
+
 	if err := db.Where("nim = ?", c.Param("nim")).First(&mhs).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Data mahasiswa tidak di temukan",
@@ -87,7 +88,7 @@ func UpdateData(c *gin.Context) {
 		return
 	}
 
-	//validasi inputan
+	//Validate
 	var dataInput MahasiswaUpdate
 	if err := c.ShouldBindJSON(&dataInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -95,9 +96,9 @@ func UpdateData(c *gin.Context) {
 		})
 		return
 	}
-	//	proses Ubah data
-	db.Model(&mhs).Update(&dataInput)
 
+	// Update Data
+	db.Model(&mhs).Update(&dataInput)
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "Successfull to Update Data",
 		"Data":    mhs,

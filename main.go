@@ -15,21 +15,21 @@ func main() {
 		c.Next()
 	})
 
-	// v1 := r.Group("/api/v1")
+	v1 := r.Group("/api/v1")
 	//Read
-	r.GET("/mahasiswa", controller.ReadData)
-	r.GET("/matakuliah", controller.ReadMatkul)
+	v1.GET("/mahasiswa", controller.ReadData)
+	v1.GET("/matakuliah", controller.ReadMatkul)
 
 	//Create
-	r.POST("/mahasiswa", controller.CreateData)
-	r.POST("/matakuliah", controller.CreateMatkul)
+	v1.POST("/mahasiswa", controller.CreateData)
+	v1.POST("/matakuliah", controller.CreateMatkul)
 
 	//Update
-	r.PUT("/mahasiswa/:nim", controller.UpdateData)
-	r.PUT("/matakuliah/:kode", controller.UpdateMatkul)
+	v1.PUT("/mahasiswa/:nim", controller.UpdateData)
+	v1.PUT("/matakuliah/:kode", controller.UpdateMatkul)
 
 	//Delete
-	r.DELETE("/mahasiswa", controller.DeleteData)
-	r.DELETE("/matakuliah", controller.DeleteMatkul)
+	v1.DELETE("/mahasiswa", controller.DeleteData)
+	v1.DELETE("/matakuliah", controller.DeleteMatkul)
 	r.Run()
 }

@@ -24,7 +24,7 @@ type MataKuliahUpdate struct {
 	DosenPengampu string `json:"dosen pengampu"`
 }
 
-//ReadData
+//Read Data
 func ReadMatkul(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var matakuliah []models.MataKuliah
@@ -39,7 +39,7 @@ func ReadMatkul(c *gin.Context) {
 func CreateMatkul(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	//validasi inputan
+	//Validate input
 	var dataInputMatkul MataKuliahInput
 	err := c.ShouldBindJSON(&dataInputMatkul)
 
@@ -54,7 +54,8 @@ func CreateMatkul(c *gin.Context) {
 		})
 
 	} else {
-		//proses input data
+
+		// Process input data
 		matkul := models.MataKuliah{
 			KodeMatkul:    dataInputMatkul.KodeMatkul,
 			NamaMatkul:    dataInputMatkul.NamaMatkul,
@@ -77,17 +78,14 @@ func UpdateMatkul(c *gin.Context) {
 
 	//validasi data
 	var matakuliah models.MataKuliah
-	if err := db.Where("kode_matkul = ?", c.Param("kode")).First(&matakuliah).Error; 
-	err != nil {
+	if err := db.Where("kode_matkul = ?", c.Param("kode")).First(&matakuliah).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Data Mata Kuliah tidak di temukan",
 		})
 		return
 	}
 
-	// if err2 := db.Where("kode_matku")
-
-	//validasi inputan
+	//Validate Input
 	var dataInput MataKuliahUpdate
 	if err := c.ShouldBindJSON(&dataInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -95,7 +93,16 @@ func UpdateMatkul(c *gin.Context) {
 		})
 		return
 	}
-	//	proses Ubah data
+
+	// if err2 := db.Where("kode_matkul = ?", dataInput.KodeMatkul).First(&matakuliah).Error; err2 != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": "Kode Mata Kuliah sudah ada",
+	// 		"pesan": dataInput.KodeMatkul,
+	// 	})
+	// 	return
+	// }
+
+	//	Process of update data
 	db.Model(&matakuliah).Update(&dataInput)
 
 	c.JSON(http.StatusOK, gin.H{
