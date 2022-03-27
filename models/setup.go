@@ -11,6 +11,6 @@ func SetupModels() *gorm.DB {
 		panic("connection to database error")
 	}
 
-	db.AutoMigrate(&Mahasiswa{})
+	db.AutoMigrate(&Mahasiswa{}, &MataKuliah{})
 	return db
 }
