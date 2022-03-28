@@ -19,10 +19,10 @@ type MahasiswaInput struct {
 }
 
 type MahasiswaUpdate struct {
-	Nama          string `json:"nama" binding:"min=6"`
+	Nama          string `json:"nama"`
 	Prodi         string `json:"prodi"`
 	Fakultas      string `json:"fakultas"`
-	NIM           int64  `json:"nim" binding:"numeric,min=100000"`
+	NIM           int64  `json:"nim" binding:"numeric"`
 	TahunAngkatan int64  `json:"tahun" binding:"numeric"`
 }
 

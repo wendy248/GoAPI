@@ -19,7 +19,7 @@ type MataKuliahInput struct {
 
 type MataKuliahUpdate struct {
 	KodeMatkul    string `json:"kode matkul"`
-	NamaMatkul    string `json:"nama matkul" binding:"min=4"`
+	NamaMatkul    string `json:"nama matkul"`
 	JumlahSKS     int16  `json:"jumlah sks"`
 	DosenPengampu string `json:"dosen pengampu"`
 }
@@ -93,14 +93,6 @@ func UpdateMatkul(c *gin.Context) {
 		})
 		return
 	}
-
-	// if err2 := db.Where("kode_matkul = ?", dataInput.KodeMatkul).First(&matakuliah).Error; err2 != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{
-	// 		"error": "Kode Mata Kuliah sudah ada",
-	// 		"pesan": dataInput.KodeMatkul,
-	// 	})
-	// 	return
-	// }
 
 	//	Process of update data
 	db.Model(&matakuliah).Update(&dataInput)
