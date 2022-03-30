@@ -29,7 +29,7 @@ type MahasiswaUpdate struct {
 //Read Data
 func ReadData(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var mhs []models.Mahasiswa
+	var mhs models.Mahasiswa
 
 	db.Find(&mhs)
 	c.JSON(http.StatusOK, gin.H{
@@ -78,7 +78,7 @@ func CreateData(c *gin.Context) {
 func UpdateData(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	//Valitdate Data
+	//Validate Data
 	var mhs models.Mahasiswa
 
 	if err := db.Where("nim = ?", c.Param("nim")).First(&mhs).Error; err != nil {
